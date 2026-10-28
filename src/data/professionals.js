@@ -1,9 +1,30 @@
 
+const serviceImages = {
+  Plumbing:
+    'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=900&q=80',
+
+  'Electrical Work':
+    'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=900&q=80',
+
+  'AC Repair':
+    'https://images.unsplash.com/photo-1631545806609-8e7c0c9a5f1c?auto=format&fit=crop&w=900&q=80',
+
+  'Home Cleaning':
+    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80',
+
+  Painting:
+    'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=900&q=80',
+
+  'Appliance Repair':
+    'https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=900&q=80',
+};
+
 const professionals = [
   {
     id: 1,
     name: 'Ali Raza',
     service: 'Plumbing',
+    image: serviceImages['Plumbing'],
     city: 'Lahore',
     rating: 4.8,
     reviews: 42,
@@ -11,11 +32,13 @@ const professionals = [
     price: 800,
     icon: '🔧',
     available: true,
+
   },
   {
     id: 2,
     name: 'Usman Ahmed',
     service: 'Electrical Work',
+    image: serviceImages['Electrical Work'],
     city: 'Lahore',
     rating: 4.9,
     reviews: 35,
@@ -28,6 +51,7 @@ const professionals = [
     id: 3,
     name: 'Hassan Malik',
     service: 'AC Repair',
+    image: serviceImages['AC Repair'],
     city: 'Lahore',
     rating: 4.7,
     reviews: 28,
@@ -40,6 +64,7 @@ const professionals = [
     id: 4,
     name: 'Ahmed Khan',
     service: 'Home Cleaning',
+    image: serviceImages['Home Cleaning'],
     city: 'Lahore',
     rating: 4.6,
     reviews: 21,
@@ -52,6 +77,7 @@ const professionals = [
     id: 5,
     name: 'Bilal Hussain',
     service: 'Plumbing',
+    image: serviceImages['Plumbing'],
     city: 'Faisalabad',
     rating: 4.8,
     reviews: 19,
@@ -64,6 +90,7 @@ const professionals = [
     id: 6,
     name: 'Hamza Iqbal',
     service: 'Electrical Work',
+    image: serviceImages['Electrical Work'],
     city: 'Faisalabad',
     rating: 4.7,
     reviews: 16,
@@ -76,6 +103,7 @@ const professionals = [
     id: 7,
     name: 'Saad Ali',
     service: 'Home Cleaning',
+    image: serviceImages['Home Cleaning'],
     city: 'Karachi',
     rating: 4.9,
     reviews: 31,
@@ -88,6 +116,7 @@ const professionals = [
     id: 8,
     name: 'Danish Shah',
     service: 'AC Repair',
+    image: serviceImages['AC Repair'],
     city: 'Karachi',
     rating: 4.8,
     reviews: 24,
@@ -100,6 +129,7 @@ const professionals = [
     id: 9,
     name: 'Usama Tariq',
     service: 'Painting',
+    image: serviceImages['Painting'],
     city: 'Islamabad',
     rating: 4.7,
     reviews: 18,
@@ -112,6 +142,7 @@ const professionals = [
     id: 10,
     name: 'Imran Yousaf',
     service: 'Appliance Repair',
+    image: serviceImages['Appliance Repair'],
     city: 'Rawalpindi',
     rating: 4.6,
     reviews: 14,

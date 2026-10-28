@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import {
   ArrowUpRight,
   Menu,
@@ -17,6 +17,7 @@ function Navbar() {
 
   return (
     <header className="navbar">
+      {/* LEFT: UstaadNow brand */}
       <NavLink
         to="/"
         className="brand"
@@ -28,11 +29,12 @@ function Navbar() {
         </span>
 
         <span className="brand-name">
-          ustaad<span>now</span>
+          Next<span>Fix</span>
           <span className="brand-dot">.</span>
         </span>
       </NavLink>
 
+      {/* MOBILE MENU BUTTON */}
       <button
         type="button"
         className="mobile-menu-toggle"
@@ -43,6 +45,7 @@ function Navbar() {
         {menuOpen ? <X size={23} /> : <Menu size={23} />}
       </button>
 
+      {/* MIDDLE: Main navigation */}
       <nav className={`nav-links ${menuOpen ? 'menu-open' : ''}`}>
         <NavLink
           to="/"
@@ -66,14 +69,25 @@ function Navbar() {
         </NavLink>
       </nav>
 
-      <NavLink
-        to="/services"
-        className="nav-cta"
-        onClick={closeMenu}
-      >
-        <span>Find a Service</span>
-        <ArrowUpRight size={17} strokeWidth={1.8} />
-      </NavLink>
+      {/* RIGHT: Actions */}
+      <div className="navbar-actions">
+        <Link
+          to="/professional/dashboard"
+          className="professional-portal-link"
+          onClick={closeMenu}
+        >
+          Professional Portal
+        </Link>
+
+        <NavLink
+          to="/services"
+          className="nav-cta"
+          onClick={closeMenu}
+        >
+          <span>Find a Service</span>
+          <ArrowUpRight size={17} strokeWidth={1.8} />
+        </NavLink>
+      </div>
     </header>
   );
 }

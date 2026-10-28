@@ -40,13 +40,14 @@ function Services() {
 
   const [city, setCity] = useState(() => (
     location.state?.city ||
-    sessionStorage.getItem('ustaadnow-city') ||
+    sessionStorage.getItem('NextFix-city') ||
     ''
   ));
 
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] =
-    useState('All Services');
+  const [selectedCategory, setSelectedCategory] = useState(
+  () => location.state?.category || 'All Services'
+);
 
   function handleCityChange(event) {
     const selectedCity = event.target.value;
@@ -54,9 +55,9 @@ function Services() {
     setCity(selectedCity);
 
     if (selectedCity) {
-      sessionStorage.setItem('ustaadnow-city', selectedCity);
+      sessionStorage.setItem('NextFix-city', selectedCity);
     } else {
-      sessionStorage.removeItem('ustaadnow-city');
+      sessionStorage.removeItem('NextFix-city');
     }
   }
 
@@ -190,9 +191,17 @@ function Services() {
                 className="service-card professional-card"
                 key={professional.id}
               >
-                <div className="service-icon" aria-hidden="true">
-                  {professional.icon}
-                </div>
+                <div className="professional-card-image">
+  <img
+    src={professional.image}
+    alt={`${professional.service} service`}
+    loading="lazy"
+  />
+
+  <span className="professional-card-icon" aria-hidden="true">
+    {professional.icon}
+  </span>
+</div>
 
                 <p className="service-category">
                   {professional.service}
