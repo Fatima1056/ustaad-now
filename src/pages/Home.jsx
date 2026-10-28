@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   MapPin,
   ChevronDown,
@@ -15,7 +16,10 @@ import {
 import '../App.css';
 
 function Home() {
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState(
+    () => sessionStorage.getItem('NextFix-city') || ''
+  );
+
   const navigate = useNavigate();
 
   const cities = [
@@ -33,13 +37,14 @@ function Home() {
 
   const popularServices = [
     {
-    name: 'Plumbing',
-    description: 'Leaks, taps, pipes and repairs.',
-    price: 'From PKR 800',
-    icon: Wrench,
-    category: 'Repairs',
-    image: 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=900&q=80',
-    imageAlt: 'Plumbing tools and home repair work',
+      name: 'Plumbing',
+      description: 'Leaks, taps, pipes and repairs.',
+      price: 'From PKR 800',
+      icon: Wrench,
+      category: 'Repairs',
+      image:
+        'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=900&q=80',
+      imageAlt: 'Plumbing tools and home repair work',
     },
     {
       name: 'Electrical Work',
@@ -47,8 +52,9 @@ function Home() {
       price: 'From PKR 1,000',
       icon: Lightbulb,
       category: 'Repairs',
-      image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=900&q=80',
-      imageAlt: 'Man Working on Wires',
+      image:
+        'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=900&q=80',
+      imageAlt: 'Electrician working on wiring',
     },
     {
       name: 'AC Repair',
@@ -56,8 +62,9 @@ function Home() {
       price: 'From PKR 1,200',
       icon: Snowflake,
       category: 'Appliances',
-      image: 'https://images.unsplash.com/photo-1631545806609-8e7c0c9a5f1c?auto=format&fit=crop&w=900&q=80',
-      imageAlt: 'Technician Repairing an Air Conditioner',
+      image:
+        'https://images.unsplash.com/photo-1631545806609-8e7c0c9a5f1c?auto=format&fit=crop&w=900&q=80',
+      imageAlt: 'Air conditioning repair service',
     },
     {
       name: 'Home Cleaning',
@@ -65,8 +72,9 @@ function Home() {
       price: 'From PKR 1,500',
       icon: Sparkles,
       category: 'Home Care',
-      image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80',
-      imageAlt: 'A Lady Cleaning a Room',
+      image:
+        'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80',
+      imageAlt: 'Home cleaning service',
     },
     {
       name: 'Painting',
@@ -74,8 +82,9 @@ function Home() {
       price: 'From PKR 3,000',
       icon: Paintbrush,
       category: 'Home Care',
-      image: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=900&q=80',
-      imageAlt: 'Person Painting a Wall',
+      image:
+        'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=900&q=80',
+      imageAlt: 'Painter refreshing an interior wall',
     },
     {
       name: 'Appliance Repair',
@@ -83,8 +92,9 @@ function Home() {
       price: 'From PKR 1,500',
       icon: Settings,
       category: 'Appliances',
-      image: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=900&q=80',
-      imageAlt: 'Technician Repairing a Washing Machine',
+      image:
+        'https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=900&q=80',
+      imageAlt: 'Household appliance maintenance',
     },
   ];
 
@@ -97,24 +107,28 @@ function Home() {
     }
 
     sessionStorage.setItem('NextFix-city', city);
-    navigate('/services', { state: { city } });
+
+    navigate('/services', {
+      state: { city },
+    });
   }
 
-  function handleServiceClick(category) {
-    if (city) {
-      sessionStorage.setItem('NextFix-city', city);
-      navigate('/services', {
-        state: { city, category },
-      });
-    } else {
-      navigate('/services', {
-        state: { category },
-      });
-    }
+  function handleServiceClick(serviceName, category) {
+    const selectedCity =
+      city || sessionStorage.getItem('NextFix-city') || '';
+
+    navigate('/services', {
+      state: {
+        city: selectedCity,
+        category,
+        service: serviceName,
+      },
+    });
   }
 
   return (
     <main>
+      {/* HERO SECTION */}
       <section className="hero">
         <div className="hero-content">
           <div className="eyebrow">
@@ -136,15 +150,32 @@ function Home() {
             needs — without the hassle.
           </p>
 
-          <form className="search-box" onSubmit={handleCitySubmit}>
-            <MapPin className="location-icon" size={23} />
+          <form
+            className="search-box"
+            onSubmit={handleCitySubmit}
+          >
+            <MapPin
+              className="location-icon"
+              size={23}
+              aria-hidden="true"
+            />
 
             <div className="city-select-wrapper">
               <select
                 className="city-select"
                 name="city"
                 value={city}
-                onChange={(event) => setCity(event.target.value)}
+                onChange={(event) => {
+                  const selectedCity = event.target.value;
+                  setCity(selectedCity);
+
+                  if (selectedCity) {
+                    sessionStorage.setItem(
+                      'NextFix-city',
+                      selectedCity
+                    );
+                  }
+                }}
                 aria-label="Select your city"
                 required
               >
@@ -159,16 +190,21 @@ function Home() {
                 ))}
               </select>
 
-              <ChevronDown className="city-select-arrow" size={17} />
+              <ChevronDown
+                className="city-select-arrow"
+                size={17}
+                aria-hidden="true"
+              />
             </div>
 
             <button type="submit">
-              Find a Professional <ArrowRight size={16} />
+              Find a Professional
+              <ArrowRight size={16} aria-hidden="true" />
             </button>
           </form>
 
           <div className="hero-trust">
-            <div className="trust-avatars">
+            <div className="trust-avatars" aria-hidden="true">
               <span>👨🏻</span>
               <span>👩🏽</span>
               <span>👨🏽</span>
@@ -213,6 +249,7 @@ function Home() {
         </div>
       </section>
 
+      {/* INTRODUCTION */}
       <section className="services-intro" id="about">
         <div>
           <span className="section-eyebrow">
@@ -230,6 +267,7 @@ function Home() {
         </p>
       </section>
 
+      {/* POPULAR SERVICES */}
       <section className="popular-services">
         <div className="popular-services-heading">
           <div>
@@ -237,7 +275,9 @@ function Home() {
               EVERYDAY HOME ESSENTIALS
             </span>
 
-            <h2>What can we help you <span>fix?</span></h2>
+            <h2>
+              What can we help you <span>fix?</span>
+            </h2>
           </div>
 
           <button
@@ -245,7 +285,8 @@ function Home() {
             className="all-services-link"
             onClick={() => navigate('/services')}
           >
-            Explore all services <ArrowRight size={17} />
+            Explore all services
+            <ArrowRight size={17} aria-hidden="true" />
           </button>
         </div>
 
@@ -258,29 +299,44 @@ function Home() {
                 type="button"
                 className="popular-service-card"
                 key={service.name}
-                onClick={() => handleServiceClick(service.category)}
+                onClick={() =>
+                  handleServiceClick(
+                    service.name,
+                    service.category
+                  )
+                }
+                aria-label={`Explore ${service.name} professionals`}
               >
                 <div className="popular-service-image">
-  <img
-    src={service.image}
-    alt={service.imageAlt}
-    loading="lazy"
-  />
-</div>
+                  <img
+                    src={service.image}
+                    alt={service.imageAlt}
+                    loading="lazy"
+                  />
+                </div>
 
-<div className="popular-service-icon">
-  <ServiceIcon size={25} strokeWidth={1.7} />
-</div>
+                <div className="popular-service-icon">
+                  <ServiceIcon
+                    size={25}
+                    strokeWidth={1.7}
+                    aria-hidden="true"
+                  />
+                </div>
 
                 <div className="popular-service-content">
                   <h3>{service.name}</h3>
+
                   <p>{service.description}</p>
+
                   <span className="popular-service-price">
                     {service.price}
                   </span>
                 </div>
 
-                <span className="popular-service-arrow">
+                <span
+                  className="popular-service-arrow"
+                  aria-hidden="true"
+                >
                   <ArrowRight size={18} />
                 </span>
               </button>
@@ -289,30 +345,111 @@ function Home() {
         </div>
       </section>
 
+      {/* CUSTOMER AND PROFESSIONAL PATHWAYS */}
+      <section className="role-pathways" id="get-started">
+        <div className="role-pathways-heading">
+          <span className="section-eyebrow">MADE FOR YOU</span>
+
+          <h2>
+            What brings you <span>to NextFix?</span>
+          </h2>
+
+          <p>
+            Whether you need a hand at home or have a skill
+            to share, there is a place for you here.
+          </p>
+        </div>
+
+        <div className="role-pathways-grid">
+          <article className="role-pathway-card customer-pathway">
+            <span className="role-pathway-number">
+              01 / CUSTOMER
+            </span>
+
+            <h3>Your home, taken care of.</h3>
+
+            <p>
+              Discover home services, compare professional
+              profiles, and arrange a booking that works for you.
+            </p>
+
+            <button
+              type="button"
+              className="role-pathway-button"
+              onClick={() => navigate('/services')}
+            >
+              Find a Professional
+              <ArrowRight size={17} aria-hidden="true" />
+            </button>
+          </article>
+
+          <article className="role-pathway-card professional-pathway">
+            <span className="role-pathway-number">
+              02 / PROFESSIONAL
+            </span>
+
+            <h3>Let your skills open doors.</h3>
+
+            <p>
+              Create a professional account or sign in to
+              access your NextFix professional dashboard.
+            </p>
+
+            <button
+              type="button"
+              className="role-pathway-button"
+              onClick={() =>
+                navigate('/signup', {
+                  state: { role: 'professional' },
+                })
+              }
+            >
+              Join as a Professional
+              <ArrowRight size={17} aria-hidden="true" />
+            </button>
+          </article>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
       <section className="how-it-works">
         <div className="how-it-works-heading">
-          <span className="section-eyebrow">SIMPLE BY DESIGN</span>
-          <h2>Good help, <span>without the hassle.</span></h2>
-          <p>Getting help around the house should feel easy.</p>
+          <span className="section-eyebrow">
+            SIMPLE BY DESIGN
+          </span>
+
+          <h2>
+            Good help, <span>without the hassle.</span>
+          </h2>
+
+          <p>
+            Getting help around the house should feel easy.
+          </p>
         </div>
 
         <div className="steps-grid">
           <article className="step-card">
             <span className="step-number">01</span>
             <h3>Choose your service</h3>
-            <p>Tell us what needs fixing and select your city.</p>
+            <p>
+              Tell us what needs fixing and select your city.
+            </p>
           </article>
 
           <article className="step-card">
             <span className="step-number">02</span>
             <h3>Explore professionals</h3>
-            <p>Browse available listings and compare their details.</p>
+            <p>
+              Browse available listings and compare their details.
+            </p>
           </article>
 
           <article className="step-card">
             <span className="step-number">03</span>
             <h3>Arrange your booking</h3>
-            <p>Choose a professional and continue to the booking form.</p>
+            <p>
+              Choose a professional and continue to the booking form.
+            </p>
           </article>
         </div>
 
@@ -321,9 +458,60 @@ function Home() {
           className="how-it-works-cta"
           onClick={() => navigate('/services')}
         >
-          Find your professional <ArrowRight size={17} />
+          Find your professional
+          <ArrowRight size={17} aria-hidden="true" />
         </button>
+
       </section>
+
+      {/* FOOTER */}
+      <footer className="site-footer">
+        <div className="site-footer-main">
+          <div className="footer-brand">
+            <Link to="/" className="footer-logo">
+              NEXTFIX<span>.</span>
+            </Link>
+
+            <p>
+              Your home, in good hands. Find local professionals
+              for everyday home repairs and services.
+            </p>
+          </div>
+
+          <div className="footer-links">
+            <h3>Explore</h3>
+            <Link to="/">Home</Link>
+            <Link to="/services">All Services</Link>
+            <Link to="/#get-started">Get Started</Link>
+          </div>
+
+          <div className="footer-links">
+            <h3>Your Account</h3>
+            <Link to="/login">Sign In</Link>
+            <Link to="/signup">Create an Account</Link>
+            <Link to="/customer/dashboard">Customer Dashboard</Link>
+            <Link to="/professional/dashboard">
+              Professional Dashboard
+            </Link>
+          </div>
+
+          <div className="footer-contact">
+            <h3>Need Help?</h3>
+            <p>We're here to help you find the right service.</p>
+            <a href="tel:+92XXXXXXXXXX">
+              +92 XXX XXXXXXX
+            </a>
+            <p className="footer-contact-note">
+              Temporary contact number — update before launch.
+            </p>
+          </div>
+        </div>
+
+        <div className="site-footer-bottom">
+          <p>© {new Date().getFullYear()} NextFix. All rights reserved.</p>
+          <p>Made for better homes.</p>
+        </div>
+      </footer>
     </main>
   );
 }

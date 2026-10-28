@@ -48,6 +48,9 @@ function Services() {
   const [selectedCategory, setSelectedCategory] = useState(
   () => location.state?.category || 'All Services'
 );
+ const [selectedService, setSelectedService] = useState(
+  () => location.state?.service || ''
+);
 
   function handleCityChange(event) {
     const selectedCity = event.target.value;
@@ -79,15 +82,20 @@ function Services() {
     const category = categoryByService[professional.service];
 
     const matchesCategory =
-      selectedCategory === 'All Services' ||
-      category === selectedCategory;
+  selectedCategory === 'All Services' ||
+  category === selectedCategory;
+
+const matchesService =
+  !selectedService ||
+  professional.service === selectedService;
 
     return (
-      matchesCity &&
-      matchesSearch &&
-      matchesCategory &&
-      professional.available
-    );
+  matchesCity &&
+  matchesSearch &&
+  matchesCategory &&
+  matchesService &&
+  professional.available
+);
   });
 
   return (
@@ -156,7 +164,10 @@ function Services() {
                   ? 'category-button selected'
                   : 'category-button'
               }
-              onClick={() => setSelectedCategory(category)}
+              onClick={() => {
+  setSelectedCategory(category);
+  setSelectedService('');
+}}
               aria-pressed={selectedCategory === category}
             >
               {category}

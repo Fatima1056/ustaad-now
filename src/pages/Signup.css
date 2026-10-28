@@ -1,0 +1,315 @@
+
+.signup-page {
+  padding: 40px 20px;
+}
+
+.signup-card {
+  max-width: 510px;
+  padding: 38px 40px;
+}
+
+.signup-brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 22px;
+  color: #c5a15b;
+  background: #263d2d;
+  border-radius: 13px;
+}
+
+.signup-card .auth-eyebrow {
+  margin: 0 0 10px;
+  color: #987b42;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.signup-card h1 {
+  margin: 0 0 12px;
+  color: #263d2d;
+  font-size: clamp(28px, 4vw, 35px);
+  font-weight: 600;
+  letter-spacing: -1px;
+}
+
+.signup-card .auth-description {
+  margin: 0 0 25px;
+  color: #777d73;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.signup-card .auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+.signup-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.signup-field > label,
+.signup-role-fieldset legend {
+  color: #28352b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.signup-field input {
+  width: 100%;
+  min-height: 47px;
+  padding: 12px 14px;
+  color: #28352b;
+  background: #fdfcf8;
+  border: 1px solid #e6e4d9;
+  border-radius: 8px;
+  outline: none;
+  font: inherit;
+  font-size: 13px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.signup-field input:focus {
+  border-color: #35543a;
+  box-shadow: 0 0 0 3px rgba(53, 84, 58, 0.1);
+}
+
+.signup-field input::placeholder {
+  color: #a2a49b;
+}
+
+.signup-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.signup-password-wrapper input {
+  padding-right: 48px;
+}
+
+.signup-password-toggle {
+  position: absolute;
+  right: 7px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  color: #697367;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.signup-password-toggle:hover {
+  color: #263d2d;
+  background: #f0f1e9;
+}
+
+.signup-field-hint {
+  color: #85897f;
+  font-size: 11px;
+}
+
+/* Customer and professional selection */
+
+.signup-role-fieldset {
+  min-width: 0;
+  margin: 2px 0 0;
+  padding: 0;
+  border: none;
+}
+
+.signup-role-fieldset legend {
+  margin-bottom: 12px;
+  padding: 0;
+}
+
+.signup-card .auth-role-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.signup-card .auth-role-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  min-width: 0;
+  padding: 17px 15px;
+  color: #28352b;
+  background: #fdfcf8;
+  border: 1px solid #e6e4d9;
+  border-radius: 11px;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.signup-card .auth-role-option:hover {
+  border-color: #a9b6a4;
+}
+
+.signup-card .auth-role-option.selected {
+  background: #f0f3e9;
+  border-color: #35543a;
+  box-shadow: inset 0 0 0 1px #35543a;
+}
+
+.signup-card .auth-role-option input[type="radio"] {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: #35543a;
+  cursor: pointer;
+}
+
+.signup-role-icon {
+  display: grid;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  color: #35543a;
+  background: #e7eddf;
+  border-radius: 9px;
+}
+
+.signup-card .auth-role-option:nth-child(2) .signup-role-icon {
+  color: #85672d;
+  background: #f3ead5;
+}
+
+.signup-card .auth-role-title {
+  padding-right: 5px;
+  color: #263d2d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.signup-card .auth-role-description {
+  color: #777d73;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* Submit button */
+
+.signup-card .auth-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 49px;
+  margin-top: 2px;
+  padding: 13px 20px;
+  color: #ffffff;
+  background: #263d2d;
+  border: 1px solid #263d2d;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.signup-card .auth-button:hover:not(:disabled) {
+  background: #35543a;
+  transform: translateY(-1px);
+}
+
+.signup-card .auth-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.signup-terms {
+  margin: -5px 0 0;
+  color: #85897f;
+  font-size: 10px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.signup-card .auth-switch {
+  margin: 22px 0 0;
+  color: #777d73;
+  font-size: 12px;
+  text-align: center;
+}
+
+.signup-card .auth-switch a,
+.signup-back-home a {
+  color: #35543a;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.signup-card .auth-switch a:hover,
+.signup-back-home a:hover {
+  color: #987b42;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.signup-back-home {
+  margin: 16px 0 0;
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Responsive layout */
+
+@media (max-width: 520px) {
+  .signup-page {
+    padding: 22px 13px;
+  }
+
+  .signup-card {
+    padding: 27px 20px;
+  }
+
+  .signup-card .auth-role-options {
+    grid-template-columns: 1fr;
+  }
+
+  .signup-card .auth-role-option {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    column-gap: 11px;
+    align-items: center;
+    padding: 13px;
+  }
+
+  .signup-role-icon {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .signup-card .auth-role-title {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .signup-card .auth-role-description {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}

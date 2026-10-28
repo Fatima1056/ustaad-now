@@ -1,28 +1,95 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import {
   ArrowUpRight,
   Menu,
   X,
   Wrench,
+  CircleUserRound,
+  ChevronDown,
+  LayoutDashboard,
+  CalendarDays,
+  UserRound,
+  LogOut,
 } from 'lucide-react';
+
+import { supabase } from '../lib/supabaseClient';
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
+  const [profileOpen, setProfileOpen] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadUser() {
+      const { data, error } = await supabase.auth.getSession();
+
+      if (!active || error) return;
+
+      const currentUser = data.session?.user ?? null;
+
+      setUser(currentUser);
+      setRole(currentUser?.user_metadata?.role ?? null);
+    }
+
+    loadUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!active) return;
+
+      const currentUser = session?.user ?? null;
+
+      setUser(currentUser);
+      setRole(currentUser?.user_metadata?.role ?? null);
+      setProfileOpen(false);
+      setMenuOpen(false);
+    });
+
+    return () => {
+      active = false;
+      subscription.unsubscribe();
+    };
+  }, []);
 
   function closeMenu() {
     setMenuOpen(false);
+    setProfileOpen(false);
   }
+
+  async function handleLogout() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error('Logout failed:', error.message);
+      return;
+    }
+
+    closeMenu();
+    window.location.assign('/');
+  }
+
+  const profilePath =
+    role === 'professional'
+      ? '/professional/dashboard'
+      : '/customer/profile';
+
+  const profileLabel =
+    role === 'professional' ? 'Professional' : 'Customer';
 
   return (
     <header className="navbar">
-      {/* LEFT: UstaadNow brand */}
+      {/* Brand */}
       <NavLink
         to="/"
         className="brand"
         onClick={closeMenu}
-        aria-label="UstaadNow home"
+        aria-label="NextFix home"
       >
         <span className="brand-icon">
           <Wrench size={21} strokeWidth={1.8} />
@@ -34,18 +101,18 @@ function Navbar() {
         </span>
       </NavLink>
 
-      {/* MOBILE MENU BUTTON */}
+      {/* Mobile menu button */}
       <button
         type="button"
         className="mobile-menu-toggle"
-        onClick={() => setMenuOpen(!menuOpen)}
+        onClick={() => setMenuOpen((open) => !open)}
         aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
         aria-expanded={menuOpen}
       >
         {menuOpen ? <X size={23} /> : <Menu size={23} />}
       </button>
 
-      {/* MIDDLE: Main navigation */}
+      {/* Main navigation */}
       <nav className={`nav-links ${menuOpen ? 'menu-open' : ''}`}>
         <NavLink
           to="/"
@@ -69,15 +136,83 @@ function Navbar() {
         </NavLink>
       </nav>
 
-      {/* RIGHT: Actions */}
+      {/* Account actions */}
       <div className="navbar-actions">
-        <Link
-          to="/professional/dashboard"
-          className="professional-portal-link"
-          onClick={closeMenu}
-        >
-          Professional Portal
-        </Link>
+        {!user ? (
+          <>
+            <Link
+              to="/login"
+              className="nav-login-link"
+              onClick={closeMenu}
+            >
+              Log In
+            </Link>
+
+            <Link
+              to="/signup"
+              className="nav-signup-link"
+              onClick={closeMenu}
+            >
+              Sign Up
+            </Link>
+          </>
+        ) : (
+          <div className="profile-menu-wrapper">
+            <button
+              type="button"
+              className="profile-menu-trigger"
+              onClick={() => setProfileOpen((open) => !open)}
+              aria-expanded={profileOpen}
+              aria-label="Open account menu"
+            >
+              <CircleUserRound size={25} />
+              <span className="profile-role">{profileLabel}</span>
+              <ChevronDown size={16} />
+            </button>
+
+            {profileOpen && (
+              <div className="profile-dropdown">
+                <Link
+                  to={profilePath}
+                  className="profile-dropdown-item"
+                  onClick={closeMenu}
+                >
+                  <UserRound size={17} />
+                  My Profile
+                </Link>
+
+                {role === 'professional' ? (
+                  <Link
+                    to="/professional/dashboard"
+                    className="profile-dropdown-item"
+                    onClick={closeMenu}
+                  >
+                    <LayoutDashboard size={17} />
+                    Professional Dashboard
+                  </Link>
+                ) : role === 'customer' ? (
+                  <Link
+                    to="/customer/dashboard"
+                    className="profile-dropdown-item"
+                    onClick={closeMenu}
+                  >
+                    <CalendarDays size={17} />
+                    My Bookings
+                  </Link>
+                ) : null}
+
+                <button
+                  type="button"
+                  className="profile-dropdown-item logout-button"
+                  onClick={handleLogout}
+                >
+                  <LogOut size={17} />
+                  Log Out
+                </button>
+              </div>
+            )}
+          </div>
+        )}
 
         <NavLink
           to="/services"
